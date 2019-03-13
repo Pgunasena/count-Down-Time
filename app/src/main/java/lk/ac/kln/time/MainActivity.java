@@ -7,27 +7,59 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     private int counter = 99;
+    private static final String CURRENT_COUNTER = "counter";
+    private boolean wasRunning;
+    private boolean running = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle saveInstanceState) {
+        super.onCreate(saveInstanceState);
         setContentView(R.layout.activity_main);
+        if (saveInstanceState != null) {
+            counter = saveInstanceState.getInt(CURRENT_COUNTER);
+        }
+        running = true;
         countDown();
     }
 
-    private void countDown(){
-        final TextView textView = findViewById(R.id.textView);
-        final Handler handler = new Handler();
+    @Override
+    public void onSaveInstanceState(Bundle saveInstanceState) {
+        super.onSaveInstanceState(saveInstanceState);
+        saveInstanceState.putInt(CURRENT_COUNTER, counter);
+    }
 
-        handler.post(new Runnable(){
+    private void countDown() {
+        final Handler handler = new Handler();
+        handler.post(new Runnable() {
             @Override
-            public void run(){
+            public void run() {
+                final TextView textView = findViewById(R.id.textView);
                 textView.setText(Integer.toString(counter));
-                counter--;
-                handler.postDelayed(this,1000);
+
+                if (counter == 0) {
+                    counter = 99;
+
+                }
+                //if(running) {
+                    counter--;
+                //}
+                handler.postDelayed(this, 1000);
 
             }
         });
 
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop(); //autocounted
+        //running=false;
+        wasRunning = true;
+    }
 }
+
