@@ -40,26 +40,36 @@ public class MainActivity extends AppCompatActivity {
                     counter = 99;
 
                 }
-                //if(running) {
+                if(running) {
                     counter--;
-                //}
+                }
                 handler.postDelayed(this, 1000);
 
             }
         });
 
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+    /*@Override
+    public void onRestart() {
+        super.onRestart();
+        running = true;
+    }*/
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onRestart() {
+        super.onRestart();
+        running = true;
     }
 
     @Override
     public void onStop() {
         super.onStop(); //autocounted
-        //running=false;
-        wasRunning = true;
+        running=false;
+        //wasRunning = true;
     }
 }
 
